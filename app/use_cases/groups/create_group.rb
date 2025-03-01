@@ -7,9 +7,9 @@ module Groups
     def execute
       group = Group.new(name: @name)
       group.save!
-      { status: :created, data: group }
+      { status: :created, data: group, message: "Group created successfully" }
     rescue ActiveRecord::RecordInvalid => e
-      { status: :unprocessable_entity, data: e.record.errors }
+      { status: :unprocessable_entity, message: e.record.errors.full_messages.join(", ") }
     end
   end
 end
