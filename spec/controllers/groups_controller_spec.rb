@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe GroupsController, type: :controller do
+  before do
+    @user = create(:user)
+    sign_in @user
+  end
+
   describe "GET #index" do
     context "with no filters" do
       it "returns a success response" do
@@ -29,6 +34,15 @@ RSpec.describe GroupsController, type: :controller do
       it "renders a JSON response with errors for the new group" do
         post :create, params: { group: { name: nil } }
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "unauthenticated" do
+      it "returns a 401 status code" do
+        sign_out @user
+        post :create, params: { group: { name: "Amigo Secreto
+        " } }
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end

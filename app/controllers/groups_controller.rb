@@ -1,5 +1,6 @@
 class GroupsController < ApplicationController
   rescue_from ActionController::ParameterMissing, with: :handle_parameter_missing
+  before_action :authenticate_user!
 
   def index
     list_groups = Groups::ListGroups.new(filter_params)
